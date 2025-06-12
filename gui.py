@@ -134,9 +134,22 @@ def update_live_plots(_):
     hma = moving_avg(hd, 5)
     lma = moving_avg(ld, 5)
 
-    buffers = [(td, tma, "Temperature", "°C", axes[0], 26), (hd, hma, "Humidity", "%", axes[1], 60), (ld, lma, "Light", "lux", axes[2], 50)]
+    buffers = {
+    "TEMP": {"data": td, "madata": tma, "Variable": "Temperature", "Unit": "°C", "AXIS" : axes[0], "THRESH" : 26},
+    "HUM": {"data": hd, "madata": hma, "Variable": "Humidity", "Unit": "%", "AXIS" : axes[1], "THRESH" : 60},
+    "LUX": {"data": ld, "madata": lma, "Variable": "Light Intensity", "Unit": "lux", "AXIS" : axes[2], "THRESH" : 100}
+    }
 
-    for buf, ma_buf, title, unit, ax, thresh in buffers:
+    # for buf, ma_buf, title, unit, ax, thresh in buffers:
+    #buffers = [(td, tma, "Temperature", "°C", axes[0], 26), (hd, hma, "Humidity", "%", axes[1], 60), (ld, lma, "Light", "lux", axes[2], 50)]
+    for key, value in buffers.items():
+        buf      = value["data"]
+        ma_buf   = value["madata"]
+        title    = value["Variable"]
+        unit     = value["Unit"]
+        ax       = value["AXIS"]
+        thresh   = value["THRESH"]
+
         ax.clear()        
         if ma_buf and len(ma_buf) == len(buf):
             ax.plot(
@@ -189,6 +202,7 @@ def update_live_plots(_):
             labelcolor="white",
             fontsize = 20
         )
+
 
 historical_canvases = {}
 
